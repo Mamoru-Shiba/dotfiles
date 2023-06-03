@@ -1,2 +1,3 @@
 #! /bin/zsh
-export PATH=$PATH:$HOME/work/dotfiles/command
+echo "export PATH=$PATH:$HOME/work/dotfiles/command" >> ~/.vimrc
+sorce ~/.vimrc
