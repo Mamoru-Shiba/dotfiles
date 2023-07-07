@@ -19,10 +19,8 @@ set smartindent "オートインデント
 set virtualedit=onemore "カーソルを行末の一つ先まで移動可能にする
 set tabstop=4 "インデントをスペース4つ分に設定
 
-"===== モードによってカーソルを変更 =====
-
 "===== マウス設定 =====
-set mouse=a
+"set mouse=a
 set ttymouse=xterm2
 
 "===== 検索設定 =====
@@ -33,32 +31,20 @@ set hlsearch "検索した文字を強調
 set incsearch "インクリメンタルサーチを有効にする
 
 "===== キー入力 =====
-"方向キーの無効化 
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-inoremap <Left> <Nop>
-inoremap <Right> <Nop>
-
-"入力モード時にcontrolキーを押しながら、h,j,k,lでカーソル移動
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-h> <Left>
-inoremap <C-l> <Right>
-
 "jキーを二度押しでESCキー
 inoremap <silent> jj <Esc>
-
+inoremap <silent> っj <Esc>
+" Move between windows
+nnoremap <Return><Return> <c-w><c-w>
 "path
-export PATH=$PATH:$HOME/work/dotfiles/command
+"vimrc反映後自動リロード
+autocmd! bufwritepost $MYVIMRC source %
 
-"===== その他 =====
+"===== その他 ====
 "履歴を100件保存
-set history=100
+set history=1000
 set clipboard+=unnamed "コピーしたときはクリップボードを使用
 set nobackup "バックアップファイルを作らない
 set noswapfile "スワップファイルを作らない
 set autoread "編集中のファイルが変更されたら、自動的に読み込み直す
+set clipboard=unnamedplus
