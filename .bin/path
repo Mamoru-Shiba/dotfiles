@@ -1,3 +1,4 @@
 #! /bin/zsh
+echo 'path.sh実行'
 echo "export PATH=$PATH:$HOME/work/dotfiles/command" >> ~/.zshrc
 source ~/.zshrc

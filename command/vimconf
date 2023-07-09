@@ -1,3 +1,4 @@
 #! /bin/zsh
 
+#MEMO: vimconfコマンド　で.vimrcを開けるようにする
 vim ~/work/dotfiles/.bin/.vimrc

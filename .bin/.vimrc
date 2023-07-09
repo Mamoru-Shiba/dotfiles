@@ -36,6 +36,15 @@ inoremap <silent> jj <Esc>
 inoremap <silent> っj <Esc>
 " Move between windows
 nnoremap <Return><Return> <c-w><c-w>
+" ファイル保存と終了
+nnoremap <Leader>w :w<CR>
+" vimrcを開く
+nnoremap <Leader>. :new ~/.vimrc<CR>
+nnoremap <Leader>s :exe "source" expand("%")<CR>
+" 行先頭と行末
+noremap H ^
+noremap L g_
+
 "path
 "vimrc反映後自動リロード
 autocmd! bufwritepost $MYVIMRC source %
@@ -47,4 +56,6 @@ set clipboard+=unnamed "コピーしたときはクリップボードを使用
 set nobackup "バックアップファイルを作らない
 set noswapfile "スワップファイルを作らない
 set autoread "編集中のファイルが変更されたら、自動的に読み込み直す
+set helplang=ja
+set autowrite " 他のバッファに移動する時に自動保存
 set clipboard=unnamedplus

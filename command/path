@@ -1,3 +1,4 @@
 #! /bin/zsh
 
+# MEMO: pathコマンドでPATHを見やすく表示する
 echo $PATH | sed   s/:/\\n/g
