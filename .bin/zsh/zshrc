@@ -1,0 +1,111 @@
+# enable prompt color
+autoload -U colors && colors
+export PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[green]%}%m%{$fg_bold[yellow]%} %3~ %{$reset_color%}
+$ "
+
+# alias
+alias v="nvim"
+
+# custom keybindings
+bindkey -v
+bindkey -M viins '\er' history-incremental-pattern-search-forward
+bindkey -M viins '^?'  backward-delete-char
+bindkey -M viins '^A'  beginning-of-line
+bindkey -M viins '^B'  backward-char
+bindkey -M viins '^D'  delete-char-or-list
+bindkey -M viins '^E'  end-of-line
+bindkey -M viins '^F'  forward-char
+bindkey -M viins '^G'  send-break
+bindkey -M viins '^H'  backward-delete-char
+bindkey -M viins '^K'  kill-line
+bindkey -M viins '^N'  down-line-or-history
+bindkey -M viins '^P'  up-line-or-history
+bindkey -M viins '^R'  history-incremental-pattern-search-backward
+bindkey -M viins '^U'  backward-kill-line
+bindkey -M viins '^W'  backward-kill-word
+bindkey -M viins '^Y'  yank
+
+
+case $( uname -s ) in
+  Linux)
+    . $HOME/.asdf/asdf.sh
+    ;;
+  Darwin)
+    # enable auto completion
+    autoload -Uz compinit && compinit
+
+    # asdf settings
+    local asdf="$(brew --prefix)/opt/asdf/libexec/asdf.sh"
+    if [ -f $asdf ]; then
+      . $asdf
+    fi
+
+    # add homebrew site-functions for completion
+    fpath=($(brew --prefix)/share/zsh/site-functions "${fpath[@]}")
+
+    # enable zsh-autosuggestions
+    local suggest=$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    if [ -f $suggest ]; then
+      source $suggest
+    fi
+
+    # colors: https://coderwall.com/p/pb1uzq/z-shell-colors
+    #export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=009"
+    #export ZSH_AUTOSUGGEST_STRATEGY=(completion history)
+
+    # add docker completion
+    if [ ! -d /usr/local/share/zsh/site-functions ]; then
+      sudo mkdir -p /usr/local/share/zsh/site-functions
+    fi
+    if [ ! -L /usr/local/share/zsh/site-functions/_docker ];then
+      sudo ln -s /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion /usr/local/share/zsh/site-functions/_docker
+      sudo ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion /usr/local/share/zsh/site-functions/_docker-compose
+    fi
+    ;;
+esac
+
+# fzf auto complete
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# k8s auto complete
+[ -x "$(which kubectl)" ] && source <(kubectl completion zsh)
+
+function ghq-fzf() {
+  local src=$(ghq list | fzf --preview "bat --color=always --style=grid $(ghq root)/{}/README.*")
+  if [ -n "$src" ]; then
+    BUFFER="cd $(ghq root)/$src"
+    zle accept-line
+  fi
+  zle -R -c
+}
+zle -N ghq-fzf
+bindkey '^g' ghq-fzf
+
+function tmuxpopup() {
+  local width='90%'
+  local height='90%'
+
+  if [ -n "$1" ];then
+    tmux popup -d '#{pane_current_path}' -xC -yC -w$width -h$height -E $1
+    return
+  fi
+
+  local name=$(tmux display-message -p -F "#{session_name}")
+  if [[ $name =~ 'popup' ]];
+  then
+    tmux detach-client
+  else
+    tmux popup -d '#{pane_current_path}' -xC -yC -w$width -h$height -E "tmux new -A -s popup"
+  fi
+}
+zle -N tmuxpopup
+
+function gify() {
+  if [ "$1" = "" ];then
+    return
+  fi
+  local file=$1
+  ffmpeg -i $file -r 10 -vf scale=1080:-1 ${file%.*}.gif
+}
+
+zle -N gify

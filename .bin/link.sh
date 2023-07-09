@@ -3,10 +3,15 @@ echo 'link.sh実行'
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # macの場合
-if [ "$(uname)" == "Darwin" ]; then
-    # MacOSの場合、.configディレクトリのシンボリックリンクを作成
-    ln -fnsv "${SCRIPT_DIR}/.config" "$HOME"
-fi
+# if [ "$(uname)" == "Darwin" ]; then
+#     # MacOSの場合、.configディレクトリのシンボリックリンクを作成
+#     ln -fnsv "${SCRIPT_DIR}/.config" "$HOME"
+# fi
+
+for dotfile in "${SCRIPT_DIR}"/zsh ; do
+    ln -fnsv "${dotfile}/zshrc" "$HOME/.zshrc"
+    ln -fnsv "${dotfile}/zprofile" "$HOME/.zprofile"
+done
 
 for dotfile in "${SCRIPT_DIR}"/.??* ; do
     [[ "$dotfile" == "${SCRIPT_DIR}/.git" ]] && continue
